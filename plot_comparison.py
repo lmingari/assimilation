@@ -89,19 +89,29 @@ for i,item in enumerate(rows):
         ye = df[df.dataset==dataset]['error']
         y  = df[df.dataset==dataset][field]
         #
-        axs[i,j].plot(y,yo,
+        ax = axs[i,j]
+        ax.plot(y,yo,
                       marker = 'o',
                       ls     = 'none',
                       color  = 'tab:red',
                       alpha  = 0.7,
-                      label  = label,
+#                      label  = label,
                       )
-        axs[i,j].plot([xmin,xmax],[xmin,xmax],'k-',        label="Ideal")
-        axs[i,j].plot([xmin,xmax],[10*xmin,10*xmax],'k--', label="1:10 ratio")
-        axs[i,j].plot([xmin,xmax],[0.1*xmin,0.1*xmax],'k--')
+        ax.plot([xmin,xmax],[xmin,xmax],        'k-',  lw = 0.8, label="Ideal")
+        ax.plot([xmin,xmax],[10*xmin,10*xmax],  'k--', lw = 0.8, label="1:10 ratio")
+        ax.plot([xmin,xmax],[3*xmin,3*xmax],    'b--', lw = 0.8, label="1:3 ratio")
+        ax.plot([xmin,xmax],[0.1*xmin,0.1*xmax],'k--', lw = 0.8)
+        ax.plot([xmin,xmax],[xmin/3.0,xmax/3.0],'b--', lw = 0.8)
+        props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+        label_ref = chr(i+j*len(rows)+97)
+        textstr = f'({label_ref})\nMethod: {label}\nDataset: {dataset}'
+        ax.text(0.04, 0.96, textstr, 
+                transform=ax.transAxes, 
+                fontsize=10,
+                verticalalignment='top', 
+                bbox=props)
 
-for ax in axs.flat:
-    ax.legend()
+for i,ax in enumerate(axs.flat):
     ax.grid()
     ax.set(ylabel = 'Deposit thickness - Observation [cm]',
            xlabel = 'Deposit thickness - Analysis/Forecast [cm]',
@@ -112,8 +122,7 @@ for ax in axs.flat:
            )
     ax.label_outer()
 
-axs[0,0].set_title("Assimilation dataset")
-axs[0,1].set_title("Validation dataset")
+axs[0,0].legend(loc=4)
 fig.tight_layout()
 fig.savefig(fname_plt,
             dpi=200,

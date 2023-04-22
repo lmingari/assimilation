@@ -1,30 +1,25 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-from matplotlib.ticker import MultipleLocator
 from os.path import join
 
 ###
 ### Parameters
 ###
-dataset   = "validation"
-fname_csv = "validation_metrics.csv"
-fname_plt = "figures/{}_metrics.png".format(dataset)
-
-if dataset == "assimilation":
-    plot_title = "Metrics - Assimilation dataset"
-else:
-    plot_title = "Metrics - Validation dataset"
+dataset    = "validation"
+fname_csv  = "validation_metrics.csv"
+fname_plt  = "figures/{}_metrics.png".format(dataset)
+plot_title = "Evaluation metrics"
 
 plot_items = [
         {'label':"GNC",
-         'marker': "*",
+         'marker': "o",
          'ls': 'solid',
          'path': 'GNC',
          'field': 'analysis',
          },
-        {'label':"GIG",
-         'marker': "o",
-         'ls': 'None',
+        {'label':"GIG (avg)",
+         'marker': "*",
+         'ls': 'solid',
          'path': 'GIG',
          'field': 'analysis',
          },
@@ -62,31 +57,38 @@ nax = len(plot_axs)
 ### Plot validation metrics
 ###
 fig, axs = plt.subplots(nax,
-        figsize=(8,nax*4),
+        figsize=(6,nax*3),
         sharex=True
         )
 for item in plot_items:
     path    = item['path']
     field   = item['field']
     df   = pd.read_csv(join(path,fname_csv))
+    df   = df[(df.percentAss>15) & (df.percentAss<85)]
     y    = df[(df.dataset==dataset) & (df.field==field)]
     #
     for ax,item_ax in zip(axs,plot_axs):
         column = item_ax['column']
-        ax.set(ylabel=item_ax['label'])
-        ax.grid()
-        ax.xaxis.set_minor_locator(MultipleLocator(5))
         ax.plot(y.percentAss,y[column],
                 marker = item['marker'],
                 ls     = item['ls'],
-                label  = item['label']
+                label  = item['label'],
+                alpha  = 0.75,
                 )
 
+for ax,item_ax in zip(axs,plot_axs):
+    if item_ax['column']=='bias':
+        x1,x2 = ax.get_ylim()
+        bound = max(abs(x1), abs(x2))
+        ax.set_ylim(-bound,bound)
+    ax.set(ylabel=item_ax['label'])
+    ax.grid()
+
 axs[0].legend()
-axs[-1].set(xlabel = 'Percent of assimilated data (%)',xlim = (0,100))
+axs[-1].set(xlabel = 'Percent of assimilated data (%)')
 
 fig.suptitle(plot_title)
 fig.tight_layout()
 fig.savefig(fname_plt,
-            dpi=200,
-            bbox_inches='tight')
+        dpi=200,
+        bbox_inches='tight')

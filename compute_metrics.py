@@ -33,7 +33,7 @@ except:
     path = './'
 
 data = []
-for percentAss in np.arange(10,100,5):
+for percentAss in np.arange(10,105,5):
     ###
     ### Read model data
     ###
@@ -63,6 +63,7 @@ for percentAss in np.arange(10,100,5):
     ### Compute accuracy metrics
     ###
     for dataset in ["assimilation","validation"]:
+        if percentAss==100 and dataset=='validation': continue
         yo = df[df.dataset==dataset]['thickness']
         ye = df[df.dataset==dataset]['error']
         for field in ["forecast","analysis"]:
