@@ -105,18 +105,33 @@ gl.ylabel_style = {'rotation': 90}
 ###
 if plot_obs:
     if debug: print("Opening observation file: {}".format(fname_obs))
+    scatter_conf = [
+            {
+                'dataset': 'assimilation',
+                'marker': 'o',
+                'label': 'Assimilation dataset (60%)',
+                },
+#            {
+#                'dataset': 'validation',
+#                'marker': 's',
+#                'label': 'Validation dataset (40%)',
+#                }
+            ]
     df = pd.read_csv(fname_obs)
-    df = df.loc[df.dataset=='assimilation']
-    ax.scatter(x          = df['longitude'], 
-               y          = df['latitude'],
-               marker     = 'o',
-               s          = 12,
-               edgecolors = 'k',
-               facecolors = 'None',
-#               linewidths = 0.6,
-#               alpha      = 0.8,
-               label      = "Assimilation dataset (60%)",
-               transform  = crs.PlateCarree())
+    for item in scatter_conf:
+        dataset = item['dataset']
+        label   = item['label']
+        marker  = item['marker']
+        ax.scatter(x          = df.loc[df.dataset==dataset]['longitude'], 
+                   y          = df.loc[df.dataset==dataset]['latitude'],
+                   marker     = marker,
+                   s          = 12,
+                   edgecolors = 'k',
+                   facecolors = 'None',
+    #               linewidths = 0.6,
+    #               alpha      = 0.8,
+                   label      = label,
+                   transform  = crs.PlateCarree())
     ax.legend(title="Observation sites:")
 
 ###

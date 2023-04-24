@@ -14,6 +14,10 @@ plot_bars = [
          'path':  'GNC',
          'field': 'forecast',
          },
+        {'label': "EnKF",
+         'path':  'ENKF',
+         'field': 'analysis',
+         },
         {'label': "GNC",
          'path':  'GNC',
          'field': 'analysis',
@@ -22,33 +26,33 @@ plot_bars = [
          'path':  'GIG',
          'field': 'analysis',
          },
-        {'label': "EnKF",
-         'path':  'ENKF',
-         'field': 'analysis',
-         },
         ]
 
 plot_subbar = [
-        {'index': (100,'assimilation'),
-         'label': "Assimilation dataset",
+        {'index': (60,'assimilation'),
+         'label': "Assimilation dataset (60%)",
          'color': 'olivedrab'},
         {'index': (60,'validation'),
-         'label': "Validation dataset",
+         'label': "Validation dataset (40%)",
          'color': 'chocolate'},
         ]
 
 plot_axs = [
         {'column': 'rmse',
-         'label': 'RMSE'
+         'label': 'RMSE',
+         'title': '(a)',
          },
         {'column': 'bias',
-         'label': 'Bias'
+         'label': 'MBE',
+         'title': '(b)',
          },
         {'column': 'smape',
-         'label': 'SMAPE [%]'
+         'label': 'SMAPE [%]',
+         'title': '(c)',
          },
         {'column': 'hits',
-         'label': 'Hit percent [%]'
+         'label': ' 1-to-3 Ratio Band Score [%]',
+         'title': '(d)',
          },
         ]
 nax = len(plot_axs)
@@ -87,6 +91,7 @@ for i,item_ax in enumerate(plot_axs):
     ax = axs.flat[i]
     column = item_ax['column']
     label  = item_ax['label']
+    title  = item_ax['title']
     for j,bar in enumerate(plot_subbar):
         y = df.loc[bar['index']]
         x = np.arange(len(y)) 
@@ -106,7 +111,7 @@ for i,item_ax in enumerate(plot_axs):
         bl[imin].set(bbox=props)
 
     ax.set_xticks(x, y.label)
-    ax.set(ylabel=label)
+    ax.set(ylabel=label, title=title)
     ax.grid(axis='y',
             linestyle='--', 
             linewidth=0.5)

@@ -73,7 +73,7 @@ plots = [
      'field': 'analysis',
      },
     {'label':"(d) GIG",
-     'path': 'GIG/001',
+     'path': 'GIG/003',
      'field': 'analysis',
      },
     ]

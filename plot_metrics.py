@@ -11,6 +11,12 @@ fname_plt  = "figures/{}_metrics.png".format(dataset)
 plot_title = "Evaluation metrics"
 
 plot_items = [
+        {'label':"EnKF",
+         'marker': "^",
+         'ls': 'solid',
+         'path': 'ENKF',
+         'field': 'analysis',
+         },
         {'label':"GNC",
          'marker': "o",
          'ls': 'solid',
@@ -21,12 +27,6 @@ plot_items = [
          'marker': "*",
          'ls': 'solid',
          'path': 'GIG',
-         'field': 'analysis',
-         },
-        {'label':"EnKF",
-         'marker': "^",
-         'ls': 'solid',
-         'path': 'ENKF',
          'field': 'analysis',
          },
 #        {'label':"Forecast",

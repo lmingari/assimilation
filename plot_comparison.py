@@ -21,16 +21,16 @@ xmin,xmax       = 1E-4,1E2
 debug           = True
 
 rows = [
-        {'label':"First guess",
+        {'label':"Forecast",
          'path': 'GNC',
          'field': 'forecast',
          },
-        {'label':"GNC",
-         'path': 'GNC',
-         'field': 'analysis',
-         },
         {'label':"EnKF",
          'path': 'ENKF',
+         'field': 'analysis',
+         },
+        {'label':"GNC",
+         'path': 'GNC',
          'field': 'analysis',
          },
         {'label':"GIG",
